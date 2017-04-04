@@ -11,10 +11,10 @@ import Foundation
 class Ginasio {
     
     var nome: String?
-    var lider: String?
+    var lider: Jogador?
     
     
-    init(nome: String, lider: String){
+    init(nome: String, lider: Jogador){
         self.nome = nome
         self.lider = lider
     }
@@ -24,7 +24,7 @@ class Ginasio {
         self.nome = nome
     }
     
-    func setLider(lider:String){
+    func setLider(lider:Jogador){
         self.lider = lider
     }
     
