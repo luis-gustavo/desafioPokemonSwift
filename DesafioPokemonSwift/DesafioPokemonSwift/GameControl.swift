@@ -42,5 +42,6 @@ class GameControl {
         
         return opcao-1
     }
+
     
 }
