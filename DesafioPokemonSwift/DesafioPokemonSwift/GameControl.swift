@@ -16,7 +16,7 @@ class GameControl {
     }
     
     class func escolhaMenu() -> Int{
-        Visao.menu
+        Visao.menu()
         var opcao:Int
         let entrada = readLine()
         opcao = Int(entrada!)!
@@ -64,7 +64,78 @@ class GameControl {
         Visao.menuEstatus(jogador: currentJogador)
     }
     
-    class func escolhaLutar(jogador:Jogador, pokemon:Pokemon){
+    class func escolhaLutar(jogador:Jogador, pokemonInimigo:Pokemon) -> Bool{
+        let indicePokemon: Int = GameControl.escolhaPokemonLutar(jogador: jogador)
+        Visao.limpaTela()
+        print("O pokemon" + jogador.pokemons[indicePokemon].nome + "foi escolhido!")
         
+        if((jogador.pokemons[indicePokemon].level - pokemonInimigo.level) >= 3){
+            
+            Visao.venceu()
+            jogador.pokemons[indicePokemon].adicionaExperienciaVitoria()
+            GameControl.evoluirPokemon(pokemon: jogador.pokemons[indicePokemon])
+            GameControl.ordernarPokemonsJogador(jogador: jogador)
+            return true
+        }else if((pokemonInimigo.level - jogador.pokemons[indicePokemon].level) >= 3){
+            
+            Visao.perdeu()
+            jogador.pokemons[indicePokemon].adicionaExperienciaDerrota()
+            GameControl.evoluirPokemon(pokemon: jogador.pokemons[indicePokemon])
+            GameControl.ordernarPokemonsJogador(jogador: jogador)
+            return false
+            
+        }else{
+            
+            if(jogador.pokemons[indicePokemon].tipo == "Agua" && pokemonInimigo.tipo == "Fogo"){
+                
+                Visao.venceu()
+                jogador.pokemons[indicePokemon].adicionaExperienciaVitoria()
+                GameControl.evoluirPokemon(pokemon: jogador.pokemons[indicePokemon])
+                GameControl.ordernarPokemonsJogador(jogador: jogador)
+                return true
+                
+            }else if(jogador.pokemons[indicePokemon].tipo == "Fogo" && pokemonInimigo.tipo == "Vento"){
+                
+                Visao.venceu()
+                jogador.pokemons[indicePokemon].adicionaExperienciaVitoria()
+                GameControl.evoluirPokemon(pokemon: jogador.pokemons[indicePokemon])
+                GameControl.ordernarPokemonsJogador(jogador: jogador)
+                return true
+                
+            }else if(jogador.pokemons[indicePokemon].tipo == "Vento" && pokemonInimigo.tipo == "Agua"){
+                
+                Visao.venceu()
+                jogador.pokemons[indicePokemon].adicionaExperienciaVitoria()
+                GameControl.evoluirPokemon(pokemon: jogador.pokemons[indicePokemon])
+                GameControl.ordernarPokemonsJogador(jogador: jogador)
+                return true
+                
+            }
+            else if(jogador.pokemons[indicePokemon].tipo == pokemonInimigo.tipo){
+                if(arc4random_uniform(2) == 1){
+                    Visao.venceu()
+                    jogador.pokemons[indicePokemon].adicionaExperienciaVitoria()
+                    GameControl.evoluirPokemon(pokemon: jogador.pokemons[indicePokemon])
+                    GameControl.ordernarPokemonsJogador(jogador: jogador)
+                    return true
+                    
+                }
+                else{
+                    Visao.perdeu()
+                    jogador.pokemons[indicePokemon].adicionaExperienciaDerrota()
+                    GameControl.evoluirPokemon(pokemon: jogador.pokemons[indicePokemon])
+                    GameControl.ordernarPokemonsJogador(jogador: jogador)
+                    return false
+                    
+                }
+            }
+            else{
+                Visao.perdeu()
+                jogador.pokemons[indicePokemon].adicionaExperienciaDerrota()
+                GameControl.evoluirPokemon(pokemon: jogador.pokemons[indicePokemon])
+                GameControl.ordernarPokemonsJogador(jogador: jogador)
+                return false
+            }
+        }
     }
 }
