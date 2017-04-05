@@ -15,6 +15,12 @@ class Pokemon{
     var level: Int
     var experiencia: Int
     
+    init() {
+        nome = String()
+        tipo = String()
+        level = 1
+        experiencia = 0
+    }
     init(nome: String, tipo: String, level: Int, experiencia: Int){
         self.nome = nome
         self.tipo = tipo
