@@ -138,4 +138,185 @@ class GameControl {
             }
         }
     }
+    
+    class func verificaLiderGinasio(ginasio:Ginasio, jogador:Jogador) -> Bool{
+        
+        if ginasio.lider?.nome == jogador.nome{
+            print("Você já é o líder deste ginásio, escolha outro !")
+            return false
+        }else{
+            return true
+        }
+    }
+    
+    class func batalhaGinasioJogador(jogador:Jogador, inimigo:Jogador, ginasio:Ginasio){
+        
+        var pokemonInimigo:String
+        
+        pokemonInimigo = inimigo.pokemons[0].nome
+        
+        print("O pokemon adversário é o : " + pokemonInimigo)
+        print("Round 1!")
+        print()
+        
+        var estatusBatalha : Bool = GameControl.escolhaLutar(jogador: jogador, pokemonInimigo: inimigo.pokemons[0])
+        
+        if(estatusBatalha){
+            //usuário ganhou o primeiro round
+            print("O pokemon adversário é o : " + pokemonInimigo)
+            print("Round 2!")
+            print()
+            
+            estatusBatalha = GameControl.escolhaLutar(jogador: jogador, pokemonInimigo: inimigo.pokemons[1])
+            
+            if(estatusBatalha){
+                //usuário ganhou o segundo round
+                print("O pokemon adversário é o : " + pokemonInimigo)
+                print("Round 3!")
+                print()
+                estatusBatalha = GameControl.escolhaLutar(jogador:jogador, pokemonInimigo:inimigo.pokemons[2])
+                
+                if(estatusBatalha){
+                    //o usuário ganhou os 3 rounds e vira o novo lider do ginásio
+                    Visao.limpaTela()
+                    print("Parabéns! você virou o novo líder desse ginásio!")
+                    ginasio.lider = jogador
+                    
+                }else{
+                    //o usuário ganhou o pimeiro o segundo e perdeu o terceiro
+                    //o usuário vira líder de ginásio
+                    Visao.limpaTela()
+                    print("Parabéns! você virou o novo líder desse ginásio!")
+                    ginasio.lider = jogador
+                }
+            }else{
+                //usuário perdeu o segundo round
+                print("O pokemon adversário é o : " + pokemonInimigo)
+                print("Round 3")
+                estatusBatalha = GameControl.escolhaLutar(jogador:jogador, pokemonInimigo:inimigo.pokemons[1])
+                
+                if(estatusBatalha){
+                    //usuário ganhou o primeiro round perdeu o segundo e ganhou o terceiro
+                    //vira líder de ginásio
+                    Visao.limpaTela()
+                    print("Parabéns! você virou o novo líder desse ginásio!")
+                    ginasio.lider = jogador
+                    
+                }else{
+                    //o usuário perdeu o segundo e o terceiro round
+                    Visao.limpaTela()
+                    print("Infelizmente não foi dessa vez, evolua seus pokemons e tente novamente!")
+                    
+                }
+                
+            }
+        }else{
+            //usuário perdeu o primeiro round
+            print("O pokemon adversário é o : " + pokemonInimigo)
+            print("Round 2!");
+            print()
+            estatusBatalha = GameControl.escolhaLutar(jogador:jogador, pokemonInimigo:inimigo.pokemons[0])
+            
+            if(estatusBatalha){
+                //perdeu o primeiro e ganhou o segundo
+                print("O pokemon adversário é o : ", pokemonInimigo)
+                print("Round 3!");
+                print()
+                estatusBatalha = GameControl.escolhaLutar(jogador:jogador, pokemonInimigo:inimigo.pokemons[1])
+                
+                if(estatusBatalha){
+                    //perdeu o primeiro, ganhou o segundo e o terceiro
+                    //jogador vira líder do ginásio
+                    Visao.limpaTela()
+                    print("Parabéns! você virou o novo líder desse ginásio!")
+                    ginasio.lider = jogador
+                }
+            }else{
+                //jogador perdeu o primeiro e o segundo round
+                print("O pokemon adversário é o : ", pokemonInimigo)
+                print("Round 3!");
+                print()
+                estatusBatalha = GameControl.escolhaLutar(jogador:jogador, pokemonInimigo:inimigo.pokemons[0])
+                
+                if(estatusBatalha){
+                    //o usuário perdeu os dois pimeiros e ganhou o último
+                    Visao.limpaTela()
+                    print(" Infelizmente não foi dessa vez que você virou líder do ginásio")
+                    print("Evolua seus pokemons, treine bastante e volte para tentar novamente!")
+                    
+                }else{
+                //o usuário perdeu os três rounds
+                Visao.limpaTela()
+                print("Infelizmente não foi dessa vez que você virou líder do ginásio")
+                print("Evolua seus pokemons, treine bastante e volte para tentar novamente!")
+            }
+        }
+    }
+    
+    func escolherConquistarGinasios(itens:NSMutableArray, currentJogador:Jogador){
+        
+        var opcao:Int
+        var verificaLiderGinasio:Bool
+        Visao.limpaTela()
+        repeat{
+            Visao.menuGinasios(itens: itens)
+            var liderGinasio:Ginasio
+            
+            opcao = Int(readLine()!)!
+            var pokemonInimigo:String
+            
+            Visao.limpaTela()
+            
+            switch opcao {
+                
+                case 1:
+                    liderGinasio = itens[34] as! Ginasio
+                    verificaLiderGinasio = GameControl.verificaLiderGinasio(ginasio: liderGinasio, jogador: currentJogador)
+                
+                    if verificaLiderGinasio {
+                        pokemonInimigo = (liderGinasio.lider?.pokemons[0].nome)!
+                        GameControl.batalhaGinasioJogador(jogador: currentJogador, inimigo: liderGinasio.lider!, ginasio: liderGinasio)
+                    }
+                
+                case 2:
+                    liderGinasio = itens[35] as! Ginasio
+                    verificaLiderGinasio = GameControl.verificaLiderGinasio(ginasio: liderGinasio, jogador: currentJogador)
+                
+                    if verificaLiderGinasio {
+                        pokemonInimigo = (liderGinasio.lider?.pokemons[0].nome)!
+                        GameControl.batalhaGinasioJogador(jogador: currentJogador, inimigo: liderGinasio.lider!, ginasio: liderGinasio)
+                    }
+                
+                case 3:
+                    liderGinasio = itens[36] as! Ginasio
+                    verificaLiderGinasio = GameControl.verificaLiderGinasio(ginasio: liderGinasio, jogador: currentJogador)
+                
+                    if verificaLiderGinasio {
+                        pokemonInimigo = (liderGinasio.lider?.pokemons[0].nome)!
+                        GameControl.batalhaGinasioJogador(jogador: currentJogador, inimigo: liderGinasio.lider!, ginasio: liderGinasio)
+                    }
+                
+                
+                case 4:
+                    liderGinasio = itens[37] as! Ginasio
+                    verificaLiderGinasio = GameControl.verificaLiderGinasio(ginasio: liderGinasio, jogador: currentJogador)
+                
+                    if verificaLiderGinasio {
+                        pokemonInimigo = (liderGinasio.lider?.pokemons[0].nome)!
+                        GameControl.batalhaGinasioJogador(jogador: currentJogador, inimigo: liderGinasio.lider!, ginasio: liderGinasio)
+                    }
+
+                case 5:
+                    //Retorna ao menu inicial
+                    break
+                default:
+                    print()
+                    print("Escolha um ginásio válido")
+            }
+            
+        } while (opcao != 5)
+            
+    }
+        
+}
 }
