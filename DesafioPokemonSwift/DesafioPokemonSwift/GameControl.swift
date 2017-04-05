@@ -10,9 +10,124 @@ import Foundation
 
 class GameControl{
     
-    class func inicializaPokemon() -> Array<Any>{
+    class func escolhaCacar(itens:NSMutableArray, jogador:Jogador){
+        var opcao:Int
+        var validado:Bool = false
+        var respostaLutar:Bool
+        Visao.limpaTela()
+        let pokemonInimigo:Pokemon = itens[Int(arc4random_uniform(30))] as! Pokemon
+        Visao.menuCacando(pokemonInimigo: pokemonInimigo)
+        
+        repeat{
+            opcao = Int(readLine()!)!
+            switch opcao{
+                case 1:
+                    validado = true
+                    respostaLutar = GameControl.escolhaLutar(jogador: jogador, pokemonInimigo: pokemonInimigo)
+                case 2:
+                    if jogador.pokemons.count >= 5 {
+                        Visao.excedeNumeroPokemons()
+                    }else{
+                        if arc4random_uniform(2) == 1 {
+                            jogador.pokemons.append(pokemonInimigo)
+                            GameControl.ordernarPokemonsJogador(jogador: jogador)
+                            Visao.capturouPokemon()
+                        }else{
+                            Visao.naoCapturouPokemon()
+                        }
+                    }
+                    validado = true
+        
+                case 3:
+                    Visao.fugiu()
+                    validado = true
+                
+                default:
+                    print("Insira uma opção válida: ")
+            }
+            
+        }while !validado
+        
+    }
+    
+    class func verificaLiderGinasio(ginasio:Ginasio, jogador:Jogador) -> Bool{
+        
+        if ginasio.lider?.nome == jogador.nome{
+            print("Você já é o líder deste ginásio, escolha outro !")
+            return false
+        }else{
+            return true
+        }
+    }
+    
+    class func escolherConquistarGinasios(itens:NSMutableArray, jogador:Jogador){
+        
+        var opcao:Int
+        var verificaLiderGinasio:Bool
+        Visao.limpaTela()
+        repeat{
+            Visao.menuGinasios(itens: itens)
+            var liderGinasio:Ginasio
+            
+            opcao = Int(readLine()!)!
+            var pokemonInimigo:String
+            
+            Visao.limpaTela()
+            
+            switch opcao {
+                
+            case 1:
+                liderGinasio = itens[34] as! Ginasio
+                verificaLiderGinasio = GameControl.verificaLiderGinasio(ginasio: liderGinasio, jogador: jogador)
+                
+                if verificaLiderGinasio {
+                    pokemonInimigo = (liderGinasio.lider?.pokemons[0].nome)!
+                    GameControl.batalhaGinasioJogador(jogador: jogador, inimigo: liderGinasio.lider!, ginasio: liderGinasio)
+                }
+                
+            case 2:
+                liderGinasio = itens[35] as! Ginasio
+                verificaLiderGinasio = GameControl.verificaLiderGinasio(ginasio: liderGinasio, jogador: jogador)
+                
+                if verificaLiderGinasio {
+                    pokemonInimigo = (liderGinasio.lider?.pokemons[0].nome)!
+                    GameControl.batalhaGinasioJogador(jogador: jogador, inimigo: liderGinasio.lider!, ginasio: liderGinasio)
+                }
+                
+            case 3:
+                liderGinasio = itens[36] as! Ginasio
+                verificaLiderGinasio = GameControl.verificaLiderGinasio(ginasio: liderGinasio, jogador: jogador)
+                
+                if verificaLiderGinasio {
+                    pokemonInimigo = (liderGinasio.lider?.pokemons[0].nome)!
+                    GameControl.batalhaGinasioJogador(jogador: jogador, inimigo: liderGinasio.lider!, ginasio: liderGinasio)
+                }
+                
+                
+            case 4:
+                liderGinasio = itens[37] as! Ginasio
+                verificaLiderGinasio = GameControl.verificaLiderGinasio(ginasio: liderGinasio, jogador: jogador)
+                
+                if verificaLiderGinasio {
+                    pokemonInimigo = (liderGinasio.lider?.pokemons[0].nome)!
+                    GameControl.batalhaGinasioJogador(jogador: jogador, inimigo: liderGinasio.lider!, ginasio: liderGinasio)
+                }
+                
+            case 5:
+                //Retorna ao menu inicial
+                break
+            default:
+                print()
+                print("Escolha um ginásio válido")
+            }
+            
+        } while (opcao != 5)
+        
+    }
+    
+    class func inicializaPokemon() -> NSMutableArray{
         //array
-        var itens = []
+        let itens: NSMutableArray = NSMutableArray()
         
         //Pokemons de fogo
         let vulpix = Pokemon(nome: "Vulpix", tipo: "Fogo", level: 1, experiencia: 0)
@@ -91,41 +206,44 @@ class GameControl{
         giovanni.pokemons.append(delphox)
     
 
-        
-        itens.append(tropius)
-        itens.append(roselia)
-        itens.append( shroomish)
-        itens.append(seedot)
-        itens.append(sunker)
-        itens.append(hopping)
-        itens.append(bellsprout)
-        itens.append(tangela)
-        itens.append(exeggcute)
-        itens.append(oddish)
-        itens.append(lapras)
-        itens.append(vaporeon)
-        itens.append(seel)
-        itens.append(shelder)
-        itens.append(krabby)
-        itens.append(slowpoke)
-        itens.append(tentacool)
-        itens.append(poliwag)
-        itens.append(magikarp)
-        itens.append(psyduck)
-        itens.append(marowak)
-        itens.append(torkoal)
-        itens.append(numel)
-        itens.append(magmar)
-        itens.append(houndour)
-        itens.append(flareon)
-        itens.append(slugma)
-        itens.append(ponyta)
-        itens.append(growlithe)
-        itens.append(vulpix)
-        itens.append(jesse)
-        itens.append(james)
-        itens.append(archie)
-        itens.append(giovanni)
+        itens.add(tropius)
+        itens.add(roselia)
+        itens.add(shroomish)
+        itens.add(seedot)
+        itens.add(sunker)
+        itens.add(hopping)
+        itens.add(bellsprout)
+        itens.add(tangela)
+        itens.add(exeggcute)
+        itens.add(oddish)
+        itens.add(lapras)
+        itens.add(vaporeon)
+        itens.add(seel)
+        itens.add(shelder)
+        itens.add(krabby)
+        itens.add(slowpoke)
+        itens.add(tentacool)
+        itens.add(poliwag)
+        itens.add(magikarp)
+        itens.add(psyduck)
+        itens.add(marowak)
+        itens.add(torkoal)
+        itens.add(numel)
+        itens.add(magmar)
+        itens.add(houndour)
+        itens.add(flareon)
+        itens.add(slugma)
+        itens.add(ponyta)
+        itens.add(growlithe)
+        itens.add(vulpix)
+        itens.add(jesse)
+        itens.add(james)
+        itens.add(archie)
+        itens.add(giovanni)
+        itens.add(pewter)
+        itens.add(cerulean)
+        itens.add(vermilion)
+        itens.add(celadon)
         
         return itens
         
@@ -261,16 +379,6 @@ class GameControl{
         }
     }
     
-    class func verificaLiderGinasio(ginasio:Ginasio, jogador:Jogador) -> Bool{
-        
-        if ginasio.lider?.nome == jogador.nome{
-            print("Você já é o líder deste ginásio, escolha outro !")
-            return false
-        }else{
-            return true
-        }
-    }
-    
     class func batalhaGinasioJogador(jogador:Jogador, inimigo:Jogador, ginasio:Ginasio){
         
         var pokemonInimigo:String
@@ -374,71 +482,6 @@ class GameControl{
             }
         }
     }
-    
-    func escolherConquistarGinasios(itens:NSMutableArray, currentJogador:Jogador){
         
-        var opcao:Int
-        var verificaLiderGinasio:Bool
-        Visao.limpaTela()
-        repeat{
-            Visao.menuGinasios(itens: itens)
-            var liderGinasio:Ginasio
-            
-            opcao = Int(readLine()!)!
-            var pokemonInimigo:String
-            
-            Visao.limpaTela()
-            
-            switch opcao {
-                
-                case 1:
-                    liderGinasio = itens[34] as! Ginasio
-                    verificaLiderGinasio = GameControl.verificaLiderGinasio(ginasio: liderGinasio, jogador: currentJogador)
-                
-                    if verificaLiderGinasio {
-                        pokemonInimigo = (liderGinasio.lider?.pokemons[0].nome)!
-                        GameControl.batalhaGinasioJogador(jogador: currentJogador, inimigo: liderGinasio.lider!, ginasio: liderGinasio)
-                    }
-                
-                case 2:
-                    liderGinasio = itens[35] as! Ginasio
-                    verificaLiderGinasio = GameControl.verificaLiderGinasio(ginasio: liderGinasio, jogador: currentJogador)
-                
-                    if verificaLiderGinasio {
-                        pokemonInimigo = (liderGinasio.lider?.pokemons[0].nome)!
-                        GameControl.batalhaGinasioJogador(jogador: currentJogador, inimigo: liderGinasio.lider!, ginasio: liderGinasio)
-                    }
-                
-                case 3:
-                    liderGinasio = itens[36] as! Ginasio
-                    verificaLiderGinasio = GameControl.verificaLiderGinasio(ginasio: liderGinasio, jogador: currentJogador)
-                
-                    if verificaLiderGinasio {
-                        pokemonInimigo = (liderGinasio.lider?.pokemons[0].nome)!
-                        GameControl.batalhaGinasioJogador(jogador: currentJogador, inimigo: liderGinasio.lider!, ginasio: liderGinasio)
-                    }
-                
-                
-                case 4:
-                    liderGinasio = itens[37] as! Ginasio
-                    verificaLiderGinasio = GameControl.verificaLiderGinasio(ginasio: liderGinasio, jogador: currentJogador)
-                
-                    if verificaLiderGinasio {
-                        pokemonInimigo = (liderGinasio.lider?.pokemons[0].nome)!
-                        GameControl.batalhaGinasioJogador(jogador: currentJogador, inimigo: liderGinasio.lider!, ginasio: liderGinasio)
-                    }
-
-                case 5:
-                    //Retorna ao menu inicial
-                    break
-                default:
-                    print()
-                    print("Escolha um ginásio válido")
-            }
-            
-        } while (opcao != 5)
-            
     }
-        
-}
 }

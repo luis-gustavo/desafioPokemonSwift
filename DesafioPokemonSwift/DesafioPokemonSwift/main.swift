@@ -16,13 +16,13 @@ repeat{
     opcao = GameControl.escolhaMenu()
     switch opcao {
     case 1:
-        GameControl.escolhaCacar(itens:itens jogador:jogador)
+        GameControl.escolhaCacar(itens: itens, jogador: jogador)
     case 2:
         if jogador.pokemons.count < 3 {
             Visao.pokemonsInsuficientes()
         }
         else{
-            GameControl.escolherConquistarGinasios(itens:itens jogador:jogador)
+            GameControl.escolherConquistarGinasios(itens:itens, jogador:jogador)
         }
     case 3:
         GameControl.mostrarStatusJogador(currentJogador: jogador)

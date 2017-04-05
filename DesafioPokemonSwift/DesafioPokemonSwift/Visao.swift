@@ -91,15 +91,16 @@ class Visao{
     class func menuLutarJogador(jogador: Jogador){
         
         print("Escolha o pokemon para batalhar!\n")
-        let contador = 1
+        var contador = 1
         
         for pokemon in jogador.pokemons {
            print("Digite \(contador) para escolher o pokemon \(pokemon.nome) de nível \(pokemon.level) de elemento \(pokemon.tipo)")
+            contador += 1
         }
     }
     
     class func menuEstatus(jogador: Jogador){
-        var pokemonAtual = 1
+        var pokemonAtual = 0
         
         print("Nome: \(jogador.nome)")
         print("Nº de pokemons: \(jogador.pokemons.count)")
